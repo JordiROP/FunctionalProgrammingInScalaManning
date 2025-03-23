@@ -37,7 +37,6 @@ object List:
 
   // Exercise 3.4
   @tailrec
-  @tailrec
   private def drop[A](as: List[A], n: Int): List[A] =
       if n == 0 then as
       else as match
@@ -146,16 +145,31 @@ object List:
       case (_, Nil) => Nil
       case (Cons(ah, at), Cons(bh, bt)) => Cons(ah+bh, sumValuesByPos(at, bt))
 
-  // Exercise 3.22
+  // Exercise 3.23
   private def applyFuncByPos[A](a: List[A], b: List[A], f: (A, A) => A): List[A] =
     (a, b) match
       case (Nil, _) => Nil
       case (_, Nil) => Nil
       case (Cons(ah, at), Cons(bh, bt)) => Cons(f(ah, bh), applyFuncByPos(at, bt, f))
 
-  // Exercise 3.22 (book solution)
+  // Exercise 3.23 (book solution)
   private def zipWith[A, B, C](a: List[A], b: List[B], f: (A, B) => C): List[C] =
     (a, b) match
       case (Nil, _) => Nil
       case (_, Nil) => Nil
       case (Cons(ah, at), Cons(bh, bt)) => Cons(f(ah, bh), zipWith(at, bt, f))
+
+  // Exercise 3.24
+  @tailrec
+  private def startsWith[A](l: List[A], prefix: List[A]): Boolean =
+    (l, prefix) match
+      case (_, Nil) => true
+      case (Cons(h1, t1), Cons(h2, t2)) if h1 == h2 => startsWith(t1, t2)
+      case _ => false
+
+  @tailrec
+  private def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean =
+    sup match
+      case Nil => true
+      case _ if startsWith(sup, sub) => true
+      case Cons(h, t) => hasSubsequence(t, sub)
